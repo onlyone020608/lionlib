@@ -48,6 +48,19 @@ public class ReservationService {
 
     }
 
+    public List<ReservationResponse> getReservationsByBookId(Long bookId) {
+        List<Reservation> reservations = findReservationsByBookId(bookId);
+        return reservations.stream()
+                .map(ReservationResponse::fromEntity)
+                .collect(Collectors.toList());
+
+    }
+
+    private List<Reservation> findReservationsByBookId(Long bookId) {
+        Book book = globalService.findBookById(bookId);
+        return reservationRepository.findAllByBook(book);
+    }
+
     private List<Reservation> findReservationsByMemberId(Long memberId) {
         Member member = globalService.findMemberById(memberId);
         return reservationRepository.findAllByMember(member);
