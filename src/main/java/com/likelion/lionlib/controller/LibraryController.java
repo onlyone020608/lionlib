@@ -143,10 +143,10 @@ public class LibraryController {
 
     // 도서  예약 목록 조회
     @GetMapping("/books/{bookId}/reservations")
-    public ResponseEntity<List<ReservationResponse>> getReservationsByBookId(@PathVariable Long bookId) {
+    public ResponseEntity<ReservationCountResponse> getReservationsCount(@PathVariable Long bookId) {
         log.info("Request GET reservations for book with ID: {}", bookId);
-        List<ReservationResponse> reservations = reservationService.getReservationsByBookId(bookId);
-        log.info("Response GET reservations for book: {}", reservations);
-        return ResponseEntity.ok(reservations);
+        ReservationCountResponse count = reservationService.countReservations(bookId);
+        log.info("Response GET reservations: {}", count);
+        return ResponseEntity.ok(count);
     }
 }

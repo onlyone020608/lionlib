@@ -6,6 +6,7 @@ import com.likelion.lionlib.domain.LoanStatus;
 import com.likelion.lionlib.domain.Member;
 import com.likelion.lionlib.domain.Reservation;
 import com.likelion.lionlib.dto.LoanResponse;
+import com.likelion.lionlib.dto.ReservationCountResponse;
 import com.likelion.lionlib.dto.ReservationRequest;
 import com.likelion.lionlib.dto.ReservationResponse;
 import com.likelion.lionlib.repository.ReservationRepository;
@@ -67,5 +68,10 @@ public class ReservationService {
     }
     public void deleteReservation(Long id ){
         reservationRepository.deleteById(id);
+    }
+
+    public ReservationCountResponse countReservations(Long bookId) {
+        Long count = reservationRepository.countByBookId(bookId);
+        return new ReservationCountResponse(count);
     }
 }
