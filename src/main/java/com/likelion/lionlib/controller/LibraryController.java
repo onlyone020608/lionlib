@@ -6,11 +6,13 @@ import com.likelion.lionlib.service.BookService;
 import com.likelion.lionlib.service.LoanService;
 import com.likelion.lionlib.service.MemberService;
 import com.likelion.lionlib.service.ReservationService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -98,8 +100,9 @@ public class LibraryController {
     }
 
     // 사용자의 대출 목록 조회
-    @GetMapping("/members/{memberId}/loans")
-    public ResponseEntity<List<LoanResponse>> getLoansByMemberId(@PathVariable Long memberId) {
+    @GetMapping("/members/loans")
+    public ResponseEntity<List<LoanResponse>> getLoansByMemberId(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getMember().getId();
         log.info("Request GET loans for member with ID: {}", memberId);
         List<LoanResponse> loans = loanService.getLoansByMemberId(memberId);
         log.info("Response GET loans for member: {}", loans);
@@ -133,8 +136,9 @@ public class LibraryController {
         return ResponseEntity.noContent().build();
     }
     // 도서 사용자 예약 목록 조회
-    @GetMapping("/members/{memberId}/reservations")
-    public ResponseEntity<List<ReservationResponse>> getReservationsByMemberId(@PathVariable Long memberId) {
+    @GetMapping("/members/reservations")
+    public ResponseEntity<List<ReservationResponse>> getReservationsByMemberId(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getMember().getId();
         log.info("Request GET reservations for member with ID: {}", memberId);
         List<ReservationResponse> reservations = reservationService.getReservationsByMemberId(memberId);
         log.info("Response GET reservations for member: {}", reservations);

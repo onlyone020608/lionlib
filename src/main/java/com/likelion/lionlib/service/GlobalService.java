@@ -4,6 +4,7 @@ import com.likelion.lionlib.domain.Book;
 import com.likelion.lionlib.domain.Member;
 import com.likelion.lionlib.domain.Reservation;
 import com.likelion.lionlib.exception.MemberNotFoundException;
+import com.likelion.lionlib.exception.BookNotFoundException;
 import com.likelion.lionlib.repository.BookRepository;
 import com.likelion.lionlib.repository.MemberRepository;
 import com.likelion.lionlib.repository.ReservationRepository;
@@ -19,7 +20,7 @@ public class GlobalService {
 
     public Book findBookById(Long bookId) {
         return bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(BookNotFoundException::new);
     }
 
     public Member findMemberById(Long memberId) {

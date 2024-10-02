@@ -1,5 +1,6 @@
 package com.likelion.lionlib.service;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import com.likelion.lionlib.domain.Book;
 import com.likelion.lionlib.domain.Loan;
 import com.likelion.lionlib.domain.LoanStatus;
@@ -9,6 +10,7 @@ import com.likelion.lionlib.dto.LoanResponse;
 import com.likelion.lionlib.repository.LoanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.likelion.lionlib.dto.CustomUserDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,11 +22,14 @@ public class LoanService {
 
     private final GlobalService globalService;
 
+
     public LoanResponse addLoan(LoanRequest loanRequest) {
-        Member member = globalService.findMemberById(loanRequest.getMemberId());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Member loggedInMember = userDetails.getMember();
         Book book = globalService.findBookById(loanRequest.getBookId());
         Loan savedLoan = Loan.builder()
-                .member(member)
+                .member(loggedInMember)
                 .book(book)
                 .loanDate(loanRequest.getLoanDate())
                 .returnDate(loanRequest.getReturnDate())

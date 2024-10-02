@@ -1,6 +1,7 @@
 package com.likelion.lionlib.controller;
 
 import com.likelion.lionlib.dto.*;
+import com.likelion.lionlib.domain.Member;
 import com.likelion.lionlib.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class MemberController {
     private final MemberService memberService;
+
+
 
     // 회원 정보 조회
     @GetMapping("/members/{memberId}")

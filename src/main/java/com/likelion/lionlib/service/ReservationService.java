@@ -5,12 +5,11 @@ import com.likelion.lionlib.domain.Loan;
 import com.likelion.lionlib.domain.LoanStatus;
 import com.likelion.lionlib.domain.Member;
 import com.likelion.lionlib.domain.Reservation;
-import com.likelion.lionlib.dto.LoanResponse;
-import com.likelion.lionlib.dto.ReservationCountResponse;
-import com.likelion.lionlib.dto.ReservationRequest;
-import com.likelion.lionlib.dto.ReservationResponse;
+import com.likelion.lionlib.dto.*;
 import com.likelion.lionlib.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,10 +24,12 @@ public class ReservationService {
     private final GlobalService globalService;
 
     public ReservationResponse addReservation(ReservationRequest reservationRequest) {
-        Member member = globalService.findMemberById(reservationRequest.getMemberId());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Member loggedInMember = userDetails.getMember();
         Book book = globalService.findBookById(reservationRequest.getBookId());
         Reservation savedReservation = Reservation.builder()
-                .member(member)
+                .member(loggedInMember)
                 .book(book)
                 .build();
         reservationRepository.save(savedReservation);

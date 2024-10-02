@@ -33,13 +33,6 @@ public class MemberService {
         profileRepository.save(profile);
     }
 
-    // 로그인 처리
-    public boolean login(String email, String password) {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
-
-        return member.getPassword().equals(password);
-    }
 
     // 회원 정보 조회
     public MemberResponse findMember(Long memberId) {
